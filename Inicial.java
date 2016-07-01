@@ -1,4 +1,4 @@
-package classes;
+package classes.UTIL;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
