@@ -1,4 +1,4 @@
-package classes.UTIL;
+package classes;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -11,16 +11,24 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import classes.UTIL.Equipe;
+
 @SuppressWarnings("serial")
 public class Inicial extends JFrame {
 	
 	private AcaoMenu action = new AcaoMenu();
 	
+	private Container contPanel;
+	private Container contMenu;
+	
 	private JPanel jpCadas = new PanelCadas();
 	private JPanel jpPlacar = new JPanel();
+	
 	private JButton jCad = new JButton("Equipes");
 	private JButton jExit = new JButton("Sair");
 	private JButton jPart = new JButton("Partida");
+	
+	private Equipe listaEquipe = new Equipe();
 	
 	
 	public static void main(String[] args) {
@@ -29,35 +37,32 @@ public class Inicial extends JFrame {
 		
 	public Inicial() {
 		
-		Container contMenu = new JPanel();
-		contMenu.setLayout(new GridLayout(1, 3));
-
-		Container contPanel = new JPanel();
-		contPanel.setLayout(new CardLayout());
-		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
 		this.setTitle("MENU");
-		this.setBounds(500, 100, 600, 600);
+		this.setBounds(500, 100, 800, 500);
 		this.setVisible(true);
 		this.getContentPane().setLayout(new BorderLayout());
-		this.getContentPane().add(contMenu, BorderLayout.NORTH);
+		
+		contMenu = new JPanel();
+		contMenu.setLayout(new GridLayout(1, 3));
+
+		contPanel = new JPanel();
+		contPanel.setLayout(new CardLayout());
 		
 		contPanel.add(jpCadas, 0);
 		contPanel.add(jpPlacar, 1);
-		this.getContentPane().add(contPanel, BorderLayout.CENTER);
-		
-		
-		jpPlacar.add(new JButton("jogo"));
-		jpCadas.setVisible(false);
-		jpPlacar.setVisible(false);
 		
 		contMenu.add(jCad);
 		contMenu.add(jPart);
 		contMenu.add(jExit);
+				
+		this.getContentPane().add(contMenu, BorderLayout.NORTH);
+		this.getContentPane().add(contPanel, BorderLayout.CENTER);
 		
 		jCad.addActionListener(action);
 		jPart.addActionListener(action);
+		jExit.addActionListener(action);
 		
 	}	
 	
@@ -67,12 +72,15 @@ public class Inicial extends JFrame {
 			if(e.getSource() == jCad){
 				jpPlacar.setVisible(false);
 				jpCadas.setVisible(true);
-				
 			}
-			else if(e.getSource() == jPart){
+			else
+				if(e.getSource() == jPart){
 				jpCadas.setVisible(false);
 				jpPlacar.setVisible(true);
-			}
+			}else
+				if(e.getSource() == jExit){
+			        System.exit(0);
+				}
 		}
 		
 	}
