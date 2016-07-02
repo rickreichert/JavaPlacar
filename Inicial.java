@@ -90,6 +90,9 @@ public class Inicial extends JFrame{
 						jpPlacar.setVisible(true);	
 					}else{
 				        JOptionPane.showMessageDialog(null,"Você precisa Cadastrar DUAS Equipes antes de iniciar uma partida!!");
+				        jpPlacar.setVisible(false);
+						jpAjuda.setVisible(false);
+						jpCadas.setVisible(true);
 					}
 					
 				}else
@@ -119,5 +122,4 @@ public class Inicial extends JFrame{
 		
 		return (String [])lista.toArray(new String [lista.size()]);
 	}
-
 }
