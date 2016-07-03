@@ -4,10 +4,10 @@ public abstract class Categoria {
 
 	private String tipo;
 	private Integer lados, altura;
-	private Float peso;
+	private Integer peso;
 	
 	
-	public Categoria(String tipo, Integer lados, Integer altura, Float peso) {
+	public Categoria(String tipo, Integer lados, Integer altura, Integer peso) {
 		this.tipo = tipo;
 		this.lados = lados;
 		this.altura = altura;
@@ -33,10 +33,10 @@ public abstract class Categoria {
 	public void setAltura(Integer altura) {
 		this.altura = altura;
 	}
-	public Float getPeso() {
+	public Integer getPeso() {
 		return peso;
 	}
-	public void setPeso(Float peso) {
+	public void setPeso(Integer peso) {
 		this.peso = peso;
 	}
 }
