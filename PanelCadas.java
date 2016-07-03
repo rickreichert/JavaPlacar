@@ -17,7 +17,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 
 
 @SuppressWarnings("serial")
@@ -93,6 +93,7 @@ public class PanelCadas extends JPanel {
 		listaEquip.setEnabled(false);
 		listaEquip.setModel(new DefaultComboBoxModel<String>(new String[] {" "}));
 		listaEquip.setBounds(71, 112, 290, 20);
+		listaEquip.addActionListener(event);
 		add(listaEquip);
 		
 		categoria = new JComboBox<String>();
@@ -160,6 +161,7 @@ public class PanelCadas extends JPanel {
 		btnRemover = new JButton("Remover");
 		btnRemover.setBounds(216, 405, 129, 23);
 		btnRemover.addActionListener(event);
+		btnRemover.setEnabled(false);
 		add(btnRemover);
 		
 		btnGravar = new JButton("Gravar");
@@ -186,9 +188,72 @@ public class PanelCadas extends JPanel {
 		larguraRobo.setText("");
 	}
 	
+	private void escreveCampos(){
+				
+		Iterator<Equipe> iterator = (Iterator<Equipe>) Inicial.getListEquipes().iterator();
+		Equipe e;
+	    while (iterator.hasNext()) {
+	    	
+	    	e = iterator.next();
+	    	
+	    	if(listaEquip.getSelectedItem().equals(e.getCapitaoEquip().getNome())){
+	    		nomeRobo.setText(e.getRoboEquip().getNome());
+	    		nomeCap.setText(e.getCapitaoEquip().getNome());
+	    		integrante1.setText(e.getIntegrantes().get(0).getNome());
+	    		integrante2.setText(e.getIntegrantes().get(1).getNome());
+	    		integrante3.setText(e.getIntegrantes().get(2).getNome());
+	    		integrante4.setText(e.getIntegrantes().get(3).getNome());
+	    		alturaRobo.setText(e.getRoboEquip().getCatRobo().getAltura().toString());
+	    		pesoRobo.setText(e.getRoboEquip().getCatRobo().getPeso().toString());
+	    		larguraRobo.setText(e.getRoboEquip().getCatRobo().getLados().toString());
+	    	}
+	    	break;
+	    }
+	}
+	
+	private void removeEquipe() {
+		Iterator<Equipe> iterator = (Iterator<Equipe>) Inicial.getListEquipes().iterator();
+		Equipe e;
+	    while (iterator.hasNext()) {
+	    	
+	    	e = iterator.next();
+	    	
+	    	if(listaEquip.getSelectedItem().equals(e.getCapitaoEquip().getNome())){
+	    		Inicial.getListEquipes().remove(e);
+	    	}
+	    	break;
+	    }
+	}
+	
+	
+	private void alteraEquipe() throws Exception{
+		
+		Iterator<Equipe> iterator = (Iterator<Equipe>) Inicial.getListEquipes().iterator();
+		Equipe e;
+	    while (iterator.hasNext()) {
+	    	
+	    	e = iterator.next();
+	    	
+	    	if(listaEquip.getSelectedItem().equals(e.getCapitaoEquip().getNome())){
+	    		
+	    		e.getRoboEquip().setNome(nomeRobo.getText());
+	    		e.getCapitaoEquip().setNome(nomeCap.getText());
+	    		e.getIntegrantes().get(0).setNome(integrante1.getText());
+	    		e.getIntegrantes().get(1).setNome(integrante2.getText());
+	    		e.getIntegrantes().get(2).setNome(integrante3.getText());
+	    		e.getIntegrantes().get(3).setNome(integrante4.getText());
+	    		e.getRoboEquip().getCatRobo().setAltura(Integer.parseInt(alturaRobo.getText()));	    		
+	    		e.getRoboEquip().getCatRobo().setPeso(Integer.parseInt(pesoRobo.getText()));	    		
+	    		e.getRoboEquip().getCatRobo().setLados(Integer.parseInt(larguraRobo.getText()));
+	    		
+	    	}
+	    	break;
+	    }
+	}
+	
 	private void criaEquipe() throws Exception{
 
-		Categoria cat = new Sumo("SUMO", Integer.getInteger(larguraRobo.getText()), Integer.getInteger(alturaRobo.getText()), Float.parseFloat(pesoRobo.getText()));
+		Categoria cat = new Sumo("SUMO", Integer.parseInt(larguraRobo.getText()), Integer.parseInt(alturaRobo.getText()), Integer.parseInt(pesoRobo.getText()));
 		
 		Pessoa pes = new Pessoa(nomeCap.getText());
 		
@@ -209,12 +274,16 @@ public class PanelCadas extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			if(e.getSource() == btnCancelar){
+				listaEquip.setModel(new DefaultComboBoxModel<String>(new String[] {" "}));
+				listaEquip.setEnabled(false);
 				limpaCadastro();
 			}else
+				
 				if(e.getSource() == btnAlterar){
 					if(listaEquip.isEnabled()){
-						
+						limpaCadastro();
 						listaEquip.setEnabled(false);
 					}else{
 						
@@ -224,18 +293,50 @@ public class PanelCadas extends JPanel {
 						listaEquip.setEnabled(true);
 					}
 				}else
+					
 					if(e.getSource() == btnGravar){
+						
 						try {
-							criaEquipe();
-							Inicial.getListEquipes().add(novaEquipe);
-							JOptionPane.showMessageDialog(null,"Gravado com Sucesso!");
-							listaEquip.setEnabled(false);
+							
+							if(!listaEquip.isEnabled()){
+								criaEquipe();
+								Inicial.getListEquipes().add(novaEquipe);
+								JOptionPane.showMessageDialog(null,"Gravado com Sucesso!");
+							}else{
+								alteraEquipe();
+								JOptionPane.showMessageDialog(null,"Alterado com Sucesso!");
+							}
+							
 							limpaCadastro();
+							btnRemover.setEnabled(true);
+							
 						} catch (Exception g) {
-							JOptionPane.showMessageDialog(null,"Preencha os Campos CORRETAMENTE para Gravar!");
+							JOptionPane.showMessageDialog(null,"Preencha os Campos CORRETAMENTE para Gravar!");							
+						} finally{
+							listaEquip.setModel(new DefaultComboBoxModel<String>(new String[] {" "}));
+							listaEquip.setEnabled(false);
 						}
 						
-					}
+					}else
+						
+						if(e.getSource() == listaEquip){
+							escreveCampos();
+						} else
+							
+							if(e.getSource() == btnRemover){
+								if(listaEquip.isEnabled()){
+									removeEquipe();
+									JOptionPane.showMessageDialog(null,"Equipe Removida com Suceso !");
+									limpaCadastro();
+									listaEquip.setModel(new DefaultComboBoxModel<String>(new String[] {" "}));
+									listaEquip.setEnabled(false);
+								}else{
+									JOptionPane.showMessageDialog(null,"Selecione Uma Equipe da Lista !");
+									listaEquip.setModel(new DefaultComboBoxModel<String>(Inicial.retornaArray_com_Equipes()));
+									listaEquip.setEnabled(true);
+								}
+								
+							}
 			
 		}
 		
